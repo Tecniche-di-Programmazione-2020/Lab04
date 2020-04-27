@@ -97,7 +97,7 @@ public class CorsoDAO {
 			st.setString(1, corso.getCodins());
 			ResultSet rs= st.executeQuery();
 			
-			if(rs.next()) {
+			while(rs.next()) {
 				iscritti.add(new Studente(rs.getInt("matricola"),rs.getString("nome"),rs.getString("cognome"),rs.getString("cds") ));
 			}
 			conn.close();

@@ -55,14 +55,34 @@ import javafx.scene.input.MouseEvent;
 	    //Fatto
 	    void doCercaCorsi(ActionEvent event) {
 	    	txtStampa.clear();
-	    	nome.clear();
-	    	cognome.clear();
+	    	Corso corso= listaCorsi.getValue();
+	    	if(corso==null) {
+	    		List<Corso> corsi= model.cercaCorsiDatoStudente(model.getStudente(Integer.parseInt(matricola.getText())));
+		    	for(Corso c:corsi) {
+		    		txtStampa.appendText(c.getNome()+"\n");
+		    	}
+	    		
+	    		
+	    		
+	    	}else {
+	    		boolean iscritto=false;
+	    		
+	    		List<Corso> corsi= model.cercaCorsiDatoStudente(model.getStudente(Integer.parseInt(matricola.getText())));
+		    	for(Corso c:corsi) {
+		    		if(c.equals(corso))iscritto=true;
+		    	}
+	    		if(iscritto==true)txtStampa.setText("Lo studente e iscritto");
+	    		else txtStampa.setText("Lo studente non e iscritto");
+	    		
+	    	}
+	    	
 	    	
 	    	
 
 	    }
 
 	    @FXML
+	    //Fatto
 	    void doCercaIscritti(ActionEvent event) {
 	    	txtStampa.clear();
 	    	try {
@@ -78,14 +98,14 @@ import javafx.scene.input.MouseEvent;
 
 			for (Studente studente : studenti) {
 
-				sb.append(String.format("%-10s ", studente.getMatricola()));
-				sb.append(String.format("%-20s ", studente.getCognome()));
-				sb.append(String.format("%-20s ", studente.getNome()));
-				sb.append(String.format("%-10s ", studente.getCds()));
+				sb.append(String.format("%-10s", studente.getMatricola()));
+				sb.append(String.format("%-20s", studente.getCognome()));
+				sb.append(String.format("%-20s", studente.getNome()));
+				sb.append(String.format("%-10s", studente.getCds()));
 				sb.append("\n");
 			}
 
-			txtStampa.appendText(sb.toString());
+			txtStampa.setText(sb.toString());
 	    	} catch (RuntimeException e) {
 				txtStampa.setText("ERRORE DI CONNESSIONE AL DATABASE!");
 			}
@@ -93,9 +113,12 @@ import javafx.scene.input.MouseEvent;
 	    }
 	    
 	    @FXML
+	    //Fatto
 	    void doCompleta(MouseEvent event) {
+	    	txtStampa.clear();
 	    	Integer matricolanum=Integer.parseInt(matricola.getText());
 	    	Studente stud= model.getStudente(matricolanum);
+	    	if(stud==null){txtStampa.setText("STUDENTE INESISTENTE!"); return;}
 	    	nome.setText(stud.getNome());
 	    	cognome.setText(stud.getCognome());
 	    
@@ -125,7 +148,7 @@ import javafx.scene.input.MouseEvent;
 	        assert nome != null : "fx:id=\"nome\" was not injected: check your FXML file 'Scene.fxml'.";
 	        assert cognome != null : "fx:id=\"cognome\" was not injected: check your FXML file 'Scene.fxml'.";
 	        assert txtStampa != null : "fx:id=\"txtStampa\" was not injected: check your FXML file 'Scene.fxml'.";
-	       
+	        txtStampa.setStyle("-fx-font-family: monospace");
 	        
 
 	    }
